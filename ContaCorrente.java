@@ -1,11 +1,15 @@
 public class ContaCorrente extends ContaBancaria implements MovimentacaoBancaria{
 	// A classe ContaCorrente extende a classe ContaBancaria e implementa a interface MovimentacaoBancaria.
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private double limiteChequeEspecial; // Declaração de uma variável de instância 'limiteChequeEspecial' que irá armazenar o limite do cheque especial.
 	
 	// Construtor da classe.
 	public ContaCorrente(String numeroConta, double saldo, double limiteChequeEspecial) throws IllegalAccessException {
-		super(numeroConta, saldo); // Chama o construtor da classe mãe (ContaBancaria) passando o número da conta e saldo.
+		super(numeroConta, saldo, numeroConta); // Chama o construtor da classe mãe (ContaBancaria) passando o número da conta e saldo.
 		this.limiteChequeEspecial = limiteChequeEspecial; // Inicializa o limite do cheque especial com o valor fornecido.
 	}
 

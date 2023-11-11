@@ -54,6 +54,7 @@ public class TelaOpcao {
 	public TelaOpcao() {
 		initialize();
 		contas = new HashMap<>();
+		numeroContas = GerenciadorContas.carregarContas(contas);
 	}
 
 	/**
@@ -99,118 +100,224 @@ public class TelaOpcao {
 		JButton btnEnviar = new JButton("Enviar");
 		btnEnviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int opcao = Integer.parseInt(txtOpcao.getText());
-				switch (opcao) {
-				case 0: {
-					JOptionPane.showMessageDialog(null, "Obrigado!");
-					System.exit(0);
-					break;
-				}
-				case 1: {
-					frmMenu.dispose();
-					
-					// Opção de criar conta
-                    String[] tipos = {"Poupança", "Corrente"};
-                    JRadioButton radioButtonPoupanca = new JRadioButton("Poupança");
-                    JRadioButton radioButtonCorrente = new JRadioButton("Corrente");
+				try {
+					int opcao = Integer.parseInt(txtOpcao.getText());
+					switch (opcao) {
+					case 0: {
+						GerenciadorContas.salvarContas(contas);
+						JOptionPane.showMessageDialog(null, "Obrigado! Volte sempre!");
+						System.exit(0);
+						break;
+					}
+					case 1: {
+					    frmMenu.dispose();
+					    
+					    // Opção de criar conta
+					    String[] tipos = {"Poupança", "Corrente"};
+					    JRadioButton radioButtonPoupanca = new JRadioButton("Poupança");
+					    JRadioButton radioButtonCorrente = new JRadioButton("Corrente");
 
-                    // Grupo de botões para permitir apenas uma seleção
-                    ButtonGroup group = new ButtonGroup();
-                    group.add(radioButtonPoupanca);
-                    group.add(radioButtonCorrente);
+					    // Grupo de botões para permitir apenas uma seleção
+					    ButtonGroup group = new ButtonGroup();
+					    group.add(radioButtonPoupanca);
+					    group.add(radioButtonCorrente);
 
-                    JTextField txtSaldo = new JTextField();
+					    JTextField txtSaldo = new JTextField();
 
-                    Object[] message = {
-                        "Nova Conta",
-                        "Tipo:",
-                        radioButtonPoupanca,
-                        radioButtonCorrente,
-                        "Número da conta: " + (++numeroContas),
-                        "Saldo em R$:",
-                        txtSaldo
-                    };
+					    Object[] message = {
+					        "Nova Conta",
+					        "Tipo:",
+					        radioButtonPoupanca,
+					        radioButtonCorrente,
+					        "Número da conta: " + (++numeroContas),
+					        "Saldo em R$:",
+					        txtSaldo
+					    };
 
-                    int option = JOptionPane.showOptionDialog(null, message, "Criar Conta",
-                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
+					    int option = JOptionPane.showOptionDialog(null, message, "Criar Conta",
+					            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
 
-                    if (option == JOptionPane.OK_OPTION) {
-                        // Botão de criar conta foi pressionado
-                        if (radioButtonPoupanca.isSelected() || radioButtonCorrente.isSelected()) {
-                            // Pelo menos uma opção de conta foi selecionada
-                            if (!txtSaldo.getText().isEmpty()) {
-                                // O saldo foi inserido
-                                double saldo = Double.parseDouble(txtSaldo.getText());
-                                if (radioButtonPoupanca.isSelected()) {
-                                    // A opção de Poupança foi selecionada
-                                    JOptionPane.showMessageDialog(null, "Conta Poupança criada com sucesso!");
-                                } else if (radioButtonCorrente.isSelected()) {
-                                    // A opção de Corrente foi selecionada
-                                    JOptionPane.showMessageDialog(null, "Conta Corrente criada com sucesso!");
-                                }
-                                frmMenu.setVisible(true);
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Por favor, insira um saldo.", "Erro ao criar a conta", JOptionPane.ERROR_MESSAGE);
-                                numeroContas--;
-                                frmMenu.setVisible(true);
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Por favor, selecione um tipo de conta.", "Erro ao criar a conta", JOptionPane.ERROR_MESSAGE);
-                            numeroContas--;
-                            frmMenu.setVisible(true);
-                        }
-                    }
-                    break;
-				}
-				case 2: {
-					String numeroConta = JOptionPane.showInputDialog("DIGITE O NÚMERO DA CONTA:");
-					if (contaExiste(numeroConta)) {
-				        Object[] options = {"1-DEPOSITAR", "2-SACAR", "3-TRANSFERIR", "4-GERAR RELATÓRIO", "0-VOLTAR"};
-				        int choice = JOptionPane.showOptionDialog(null,
-				                "Escolha uma opção:",
-				                "Opções",
-				                JOptionPane.YES_NO_CANCEL_OPTION,
-				                JOptionPane.WARNING_MESSAGE,
-				                null,
-				                options,
-				                options[0]);
+					    if (option == JOptionPane.OK_OPTION) {
+					        // Botão de criar conta foi pressionado
+					        if (radioButtonPoupanca.isSelected() || radioButtonCorrente.isSelected()) {
+					            // Pelo menos uma opção de conta foi selecionada
+					            if (!txtSaldo.getText().isEmpty()) {
+					                // O saldo foi inserido
+					                double saldo = Double.parseDouble(txtSaldo.getText());
+					                String tipoConta = radioButtonPoupanca.isSelected() ? "Poupança" : "Corrente";
+					                String numeroConta = Integer.toString(numeroContas);
 
-				        switch (choice) {
-				            case 0: // 1-DEPOSITAR
-				                // Implemente o código para depositar aqui
-				                break;
-				            case 1: // 2-SACAR
-				                // Implemente o código para sacar aqui
-				                break;
-				            case 2: // 3-TRANSFERIR
-				                // Implemente o código para transferir aqui
-				                break;
-				            case 3: // 4-GERAR RELATÓRIO
-				                // Implemente o código para gerar relatório aqui
-				                break;
-				            case 4: // 0-VOLTAR
-				                // Voltar para o menu
-				                break;
-				            default:
-				                break;
-				        }
-				    } else {
-				        JOptionPane.showMessageDialog(null, "Conta inexistente ou inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
-				    }
-					break;
-				}
-				case 3: {
-					break;
-				}
-				case 4: {
-					break;
-				}
-				default:
-					throw new IllegalArgumentException("Unexpected value: " + opcao);
+					                // Cria a conta
+					                ContaBancaria novaConta = null;
+									try {
+										novaConta = new ContaBancaria(numeroConta, saldo, tipoConta);
+									} catch (IllegalAccessException e1) {
+										e1.printStackTrace();
+									}
+					                
+					                // Adiciona a conta ao HashMap
+					                contas.put(numeroConta, novaConta);
+
+					                JOptionPane.showMessageDialog(null, "Conta " + tipoConta + " criada com sucesso!");					              
+					            } else {
+					                JOptionPane.showMessageDialog(null, "Por favor, insira um saldo.", "Erro ao criar a conta", JOptionPane.ERROR_MESSAGE);
+					                numeroContas--;
+					            }
+					        } else {
+					            JOptionPane.showMessageDialog(null, "Por favor, selecione um tipo de conta.", "Erro ao criar a conta", JOptionPane.ERROR_MESSAGE);
+					            numeroContas--;
+					        }
+					    } else {
+					    	JOptionPane.showMessageDialog(null, "Operação cancelada pelo usuário.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+					    }
+					    GerenciadorContas.salvarContas(contas);
+					    frmMenu.setVisible(true);
+					    break;
+					}
+					case 2: {
+						frmMenu.dispose();
+						
+					    String numeroConta = JOptionPane.showInputDialog("DIGITE O NÚMERO DA CONTA:");
+					    
+					    if(numeroConta == null) {
+					    	// O usuário clicou em Cancelar ou fechou a janela
+					    	frmMenu.setVisible(true);
+					    	break;
+					    }
+					    try {
+					    	if (contaExiste(numeroConta)) {
+						        JTextField txtOpcaoOperacao = new JTextField();
+
+						        Object[] message = {
+						            "Escolha uma opção:",
+						            "1-DEPOSITAR\n2-SACAR\n3-TRANSFERIR\n4-GERAR RELATÓRIO\n0-VOLTAR",
+						            "Digite sua opção:",
+						            txtOpcaoOperacao
+						        };
+
+						        int option = JOptionPane.showOptionDialog(null,
+						                message,
+						                "Opções",
+						                JOptionPane.OK_CANCEL_OPTION,
+						                JOptionPane.WARNING_MESSAGE,
+						                null,
+						                null,
+						                null);
+
+						        if (option == JOptionPane.OK_OPTION) {
+						            int operacao = Integer.parseInt(txtOpcaoOperacao.getText());
+
+						            switch (operacao) {
+						                case 1: // 1-DEPOSITAR
+						                    double valorDeposito = Double.parseDouble(JOptionPane.showInputDialog("DIGITE O VALOR R$:"));
+						                    contas.get(numeroConta).depositar(valorDeposito);
+						                    JOptionPane.showMessageDialog(null, "Depósito efetuado. Novo saldo: " + contas.get(numeroConta).getSaldo());
+						                    frmMenu.setVisible(true);
+						                    break;
+						                case 2: // 2-SACAR
+						                    double valorSaque = Double.parseDouble(JOptionPane.showInputDialog("DIGITE O VALOR R$:"));
+						                    try {
+						                        contas.get(numeroConta).sacar(valorSaque);
+						                        JOptionPane.showMessageDialog(null, "Saque efetuado. Novo saldo: " + contas.get(numeroConta).getSaldo());
+						                    } catch (SaldoInsuficienteException e1) {
+						                        JOptionPane.showMessageDialog(null, e1.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+						                    }
+						                    frmMenu.setVisible(true);
+						                    break;
+						                case 3: // 3-TRANSFERIR
+						                    String numeroContaDestino = JOptionPane.showInputDialog("DIGITE O NÚMERO DA CONTA DESTINATÁRIA:");
+						                    if (contaExiste(numeroContaDestino)) {
+						                        double valorTransferencia = Double.parseDouble(JOptionPane.showInputDialog("DIGITE O VALOR R$:"));
+						                        try {
+						                            contas.get(numeroConta).sacar(valorTransferencia);
+						                            contas.get(numeroContaDestino).depositar(valorTransferencia);
+						                            JOptionPane.showMessageDialog(null, "Transferência efetuada!");
+						                        } catch (SaldoInsuficienteException e1) {
+						                            JOptionPane.showMessageDialog(null, e1.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+						                        }
+						                    } else {
+						                        JOptionPane.showMessageDialog(null, "Conta destinatária inexistente ou inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
+						                    }
+						                    frmMenu.setVisible(true);
+						                    break;
+						                case 4: // 4-GERAR RELATÓRIO
+						                    ContaBancaria contaSelecionada = contas.get(numeroConta);
+						                    String relatorio = "Número da Conta: " + contaSelecionada.getNumeroConta() +
+						                            "\nSaldo: R$" + contaSelecionada.getSaldo();
+
+						                    if (contaSelecionada instanceof ContaCorrente) {
+						                        double limiteChequeEspecial = ((ContaCorrente) contaSelecionada).getLimiteChequeEspecial();
+						                        relatorio += "\nLimite do Cheque Especial: R$" + limiteChequeEspecial;
+						                    }
+
+						                    JOptionPane.showMessageDialog(null, relatorio, "Relatório", JOptionPane.INFORMATION_MESSAGE);
+						                    frmMenu.setVisible(true);
+						                    break;
+						                case 0: // 0-VOLTAR
+						                	frmMenu.setVisible(true);
+						                    break;
+						                default:
+						                	JOptionPane.showMessageDialog(null, "Opção inválida. Por favor, escolha uma opção de 0 a 4.", "Erro", JOptionPane.ERROR_MESSAGE);
+						                    break;
+						            }
+						        }
+						    } else {
+						        JOptionPane.showMessageDialog(null, "Conta inexistente ou inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
+						    }
+						} catch (NumberFormatException ex) {
+							JOptionPane.showMessageDialog(null, "Por favor, digite um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
+						}
+					    GerenciadorContas.salvarContas(contas);
+					    frmMenu.setVisible(true);
+					    break;
+					}
+					case 3: {
+					    String numeroContaApagar = JOptionPane.showInputDialog("DIGITE O NÚMERO DA CONTA:");
+					    if (contaExiste(numeroContaApagar)) {
+					        // Apagar os dados da conta
+					        contas.remove(numeroContaApagar);
+
+					        // Mostrar mensagem de confirmação
+					        JOptionPane.showMessageDialog(null, "Dados apagados");
+
+					        // Mostrar mensagem de conta apagada
+					        JOptionPane.showMessageDialog(null, "CONTA " + numeroContaApagar + " APAGADA!");
+					    } else {
+					        JOptionPane.showMessageDialog(null, "Conta inexistente ou inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
+					    }
+					    GerenciadorContas.salvarContas(contas);
+					    break;
+					}
+					case 4: {
+					    if (contas.isEmpty()) {
+					        JOptionPane.showMessageDialog(null, "Não há contas registradas.", "Erro", JOptionPane.ERROR_MESSAGE);
+					    } else {
+					        StringBuilder relatorio = new StringBuilder();
+					        for (ContaBancaria conta : contas.values()) {
+					            relatorio.append("Tipo: ").append(conta.getTipoConta())
+					                    .append("\nNúmero da Conta: ").append(conta.getNumeroConta())
+					                    .append("\nSaldo: R$").append(conta.getSaldo());
+					            if (conta instanceof ContaCorrente) {
+					                relatorio.append("\nLimite Cheque Especial: R$").append(((ContaCorrente) conta).getLimiteChequeEspecial());
+					            } else if (conta instanceof ContaPoupanca) {
+					                relatorio.append("\nTaxa de Rendimento: ").append(((ContaPoupanca) conta).getTaxaRendimemto());
+					            }
+					            relatorio.append("\n\n");
+					        }
+
+					        JOptionPane.showMessageDialog(null, relatorio.toString(), "Relatório de Contas", JOptionPane.INFORMATION_MESSAGE);
+					    }
+					    break;
+					}
+					default:
+						JOptionPane.showMessageDialog(null, "Opção inválida. Por favor, escolha uma opção de 0 a 4.", "Erro", JOptionPane.ERROR_MESSAGE);
+						break;
+					}
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "Por favor, digite um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
-
 			private boolean contaExiste(String numeroConta) {
 				return contas.containsKey(numeroConta);
 			}
