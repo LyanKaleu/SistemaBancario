@@ -1,6 +1,7 @@
+
 public class TesteBanco {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IllegalAccessException {
 		try {
 			ContaCorrente contaCorrente = new ContaCorrente("123", 1000.0, 500.0);
 			contaCorrente.depositar(200.0);
